@@ -2,10 +2,11 @@ package folki.dev.core.entities;
 
 import folki.dev.infra.config.Config;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 
-public class Link {
+public class Link implements Serializable {
     public User owner;
     public String originURL;
     public String shortURL;
@@ -23,5 +24,16 @@ public class Link {
     @Override
     public int hashCode() {
         return originURL.hashCode() + shortURL.hashCode() + owner.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "Link{" +
+                "owner=" + owner +
+                ", originURL='" + originURL + '\'' +
+                ", shortURL='" + shortURL + '\'' +
+                ", creationDateTime=" + creationDateTime +
+                ", expirationDateTime=" + expirationDateTime +
+                '}';
     }
 }

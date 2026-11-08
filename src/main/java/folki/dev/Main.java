@@ -1,17 +1,32 @@
 package folki.dev;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import folki.dev.core.entities.User;
+import folki.dev.infra.storage.FileStorage;
+import folki.dev.infra.storage.Storage;
+
+import java.io.IOException;
+import java.nio.file.Path;
+
 public class Main {
     static void main() {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        IO.println(String.format("Hello and welcome!"));
-
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            IO.println("i = " + i);
+        Path path = Path.of("test.dat");
+        if (!path.toFile().exists()) {
+            try {
+                path.toFile().createNewFile();
+                new FileStorage(path.toFile()).save();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try (Storage storage = FileStorage.load(path.toFile())) {
+            if (storage.getAllUsers().isEmpty()) {
+                storage.saveUser(new User());
+                System.out.println("User created");
+            } else {
+                storage.getAllUsers().forEach(System.out::println);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
