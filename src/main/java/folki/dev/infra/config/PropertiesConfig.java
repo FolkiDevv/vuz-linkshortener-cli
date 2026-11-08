@@ -1,10 +1,12 @@
 package folki.dev.infra.config;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import org.jspecify.annotations.Nullable;
 
 public class PropertiesConfig implements Config {
-    private Map<String, String> config;
+    private Map<String, String> config = new HashMap<>();
 
     @Override
     public Config loadConfig(Map<String, String> config) {
@@ -15,7 +17,7 @@ public class PropertiesConfig implements Config {
     }
 
     @Override
-    public String get(String key) {
+    public @Nullable String get(String key) {
         return config.get(key);
     }
 

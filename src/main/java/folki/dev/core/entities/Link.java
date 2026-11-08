@@ -1,15 +1,12 @@
 package folki.dev.core.entities;
 
 import folki.dev.infra.config.Config;
-
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
-
-public class Link implements Serializable {
-    public User owner;
-    public String originURL;
-    public String shortURL;
+public class Link {
+    public final User owner;
+    public final String originURL;
+    public final String shortURL;
     public LocalDateTime creationDateTime;
     public LocalDateTime expirationDateTime;
 
@@ -21,6 +18,14 @@ public class Link implements Serializable {
         this.expirationDateTime = LocalDateTime.now().plusSeconds(config.getInt("link.ttl.seconds", 86400));
     }
 
+    public Link(User owner, String originURL, String shortURL, LocalDateTime creation, LocalDateTime expiration) {
+        this.owner = owner;
+        this.originURL = originURL;
+        this.shortURL = shortURL;
+        this.creationDateTime = creation;
+        this.expirationDateTime = expiration;
+    }
+
     @Override
     public int hashCode() {
         return originURL.hashCode() + shortURL.hashCode() + owner.hashCode();
@@ -28,12 +33,11 @@ public class Link implements Serializable {
 
     @Override
     public String toString() {
-        return "Link{" +
-                "owner=" + owner +
-                ", originURL='" + originURL + '\'' +
-                ", shortURL='" + shortURL + '\'' +
-                ", creationDateTime=" + creationDateTime +
-                ", expirationDateTime=" + expirationDateTime +
-                '}';
+        return "Link{" + "owner="
+                + owner + ", originURL='"
+                + originURL + '\'' + ", shortURL='"
+                + shortURL + '\'' + ", creationDateTime="
+                + creationDateTime + ", expirationDateTime="
+                + expirationDateTime + '}';
     }
 }

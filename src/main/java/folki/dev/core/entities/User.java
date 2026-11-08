@@ -1,10 +1,17 @@
 package folki.dev.core.entities;
 
-import java.io.Serializable;
 import java.util.UUID;
 
-public class User implements Serializable {
-    public UUID id = UUID.randomUUID();
+public class User {
+    public final UUID id;
+
+    public User() {
+        this.id = UUID.randomUUID();
+    }
+
+    public User(UUID id) {
+        this.id = id;
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -21,8 +28,6 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                '}';
+        return "User{" + "id=" + id + '}';
     }
 }
