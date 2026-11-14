@@ -31,7 +31,13 @@ public final class FileStorage implements Storage {
     private record FileData(List<UUID> users, List<LinkJson> links) {}
 
     private record LinkJson(
-            UUID owner, String originURL, String shortURL, String creationDateTime, String expirationDateTime) {}
+            UUID owner,
+            String originURL,
+            String shortURL,
+            String creationDateTime,
+            String expirationDateTime,
+            int maxClicks,
+            int clickCount) {}
 
     public FileStorage(File file) {
         this.file = file;
@@ -56,7 +62,9 @@ public final class FileStorage implements Storage {
                         json.originURL(),
                         json.shortURL(),
                         LocalDateTime.parse(json.creationDateTime()),
-                        LocalDateTime.parse(json.expirationDateTime()));
+                        LocalDateTime.parse(json.expirationDateTime()),
+                        json.maxClicks(),
+                        json.clickCount());
                 storage.links.put(link.shortURL, link);
             }
         } catch (IOException | RuntimeException e) {
@@ -74,7 +82,9 @@ public final class FileStorage implements Storage {
                         link.originURL,
                         link.shortURL,
                         link.creationDateTime.toString(),
-                        link.expirationDateTime.toString()))
+                        link.expirationDateTime.toString(),
+                        link.maxClicks,
+                        link.clickCount.get()))
                 .toList();
 
         try (Writer writer = Files.newBufferedWriter(file.toPath(), StandardCharsets.UTF_8)) {

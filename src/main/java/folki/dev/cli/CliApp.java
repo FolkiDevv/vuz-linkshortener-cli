@@ -3,6 +3,7 @@ package folki.dev.cli;
 import folki.dev.core.Interaction;
 import folki.dev.core.entities.Link;
 import folki.dev.core.entities.User;
+import folki.dev.core.exceptions.AppException;
 import folki.dev.core.exceptions.UserNotFoundError;
 import folki.dev.core.services.LinkService;
 import folki.dev.infra.config.ShortenerSettings;
@@ -14,13 +15,14 @@ import java.util.UUID;
 import org.jspecify.annotations.NonNull;
 
 public final class CliApp {
-    private final Interaction intr = new CliInteraction();
+    private final Interaction intr;
     private final Storage storage;
     private final ShortenerSettings settings;
     private final LinkService linkService;
     private final User user;
 
-    public CliApp(ShortenerSettings settings, Storage storage, LinkService linkService) {
+    public CliApp(Interaction intr, ShortenerSettings settings, Storage storage, LinkService linkService) {
+        this.intr = intr;
         this.settings = settings;
         this.storage = storage;
         this.linkService = linkService;
@@ -83,9 +85,11 @@ public final class CliApp {
 
     private void openLink() {
         String link = intr.askForString("Введите короткую ссылку или код");
-        Link linkToOpen = storage.getLinkByShortURL(extractCode(link));
-        if (linkToOpen == null) {
-            intr.print("Ссылка не найдена");
+        Link linkToOpen;
+        try {
+            linkToOpen = linkService.openLink(extractCode(link));
+        } catch (AppException e) {
+            intr.printError(e.getMessage());
             return;
         }
 

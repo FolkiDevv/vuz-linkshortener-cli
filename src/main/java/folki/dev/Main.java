@@ -1,9 +1,14 @@
 package folki.dev;
 
 import folki.dev.cli.CliApp;
+import folki.dev.cli.CliInteraction;
+import folki.dev.cli.SoutNotifier;
+import folki.dev.core.Interaction;
 import folki.dev.core.services.CodeGenerator;
 import folki.dev.core.services.LinkService;
 import folki.dev.core.services.RandomCodeGenerator;
+import folki.dev.infra.LoggingConfig;
+import folki.dev.infra.Notifier;
 import folki.dev.infra.config.Config;
 import folki.dev.infra.config.PropertiesConfig;
 import folki.dev.infra.config.ShortenerSettings;
@@ -13,13 +18,17 @@ import java.nio.file.Path;
 
 public class Main {
     static void main() {
+        LoggingConfig.configure(LoggingConfig.DEFAULT_RESOURCE);
+
         Config config = PropertiesConfig.load(PropertiesConfig.DEFAULT_RESOURCE, Path.of("config.properties"));
         ShortenerSettings settings = ShortenerSettings.fromConfig(config);
 
+        Interaction intr = new CliInteraction();
+        Notifier notifier = new SoutNotifier(intr);
         Storage storage = FileStorage.load(settings.storagePath());
         CodeGenerator codeGenerator = new RandomCodeGenerator(settings.codeLength());
-        LinkService linkService = new LinkService(storage, codeGenerator, settings);
-        CliApp app = new CliApp(settings, storage, linkService);
+        LinkService linkService = new LinkService(storage, codeGenerator, settings, notifier);
+        CliApp app = new CliApp(intr, settings, storage, linkService);
         app.mainCycle();
     }
 }
