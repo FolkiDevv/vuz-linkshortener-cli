@@ -5,7 +5,7 @@ import folki.dev.core.entities.Link;
 import folki.dev.core.entities.User;
 import folki.dev.core.exceptions.UserNotFoundError;
 import folki.dev.core.services.LinkService;
-import folki.dev.infra.config.Config;
+import folki.dev.infra.config.ShortenerSettings;
 import folki.dev.infra.storage.Storage;
 import java.awt.*;
 import java.io.IOException;
@@ -16,12 +16,12 @@ import org.jspecify.annotations.NonNull;
 public final class CliApp {
     private final Interaction intr = new CliInteraction();
     private final Storage storage;
-    private final Config config;
+    private final ShortenerSettings settings;
     private final LinkService linkService;
     private final User user;
 
-    public CliApp(Config config, Storage storage, LinkService linkService) {
-        this.config = config;
+    public CliApp(ShortenerSettings settings, Storage storage, LinkService linkService) {
+        this.settings = settings;
         this.storage = storage;
         this.linkService = linkService;
         this.user = intr.askForBoolean("У вас есть UUID?") ? userLogin() : userRegister();
@@ -111,9 +111,7 @@ public final class CliApp {
     }
 
     private @NonNull String toFullShortUrl(@NonNull Link link) {
-        return config.getOptional("shortener.baseDomain")
-                .map(domain -> domain + "/" + link.shortURL)
-                .orElse(link.shortURL);
+        return settings.toFullShortUrl(link.shortURL);
     }
 
     private static @NonNull String extractCode(@NonNull String input) {

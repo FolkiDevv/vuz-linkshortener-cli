@@ -14,5 +14,7 @@ public interface Config {
 
     int getInt(String key, int defaultValue);
 
+    int getPositiveInt(String key, int defaultValue);
+
     boolean getBoolean(String key, boolean defaultValue);
 }

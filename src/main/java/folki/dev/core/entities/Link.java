@@ -1,8 +1,6 @@
 package folki.dev.core.entities;
 
-import folki.dev.infra.config.Config;
 import java.time.LocalDateTime;
-import org.jspecify.annotations.NonNull;
 
 public final class Link {
     public final User owner;
@@ -10,14 +8,6 @@ public final class Link {
     public final String shortURL;
     public LocalDateTime creationDateTime;
     public LocalDateTime expirationDateTime;
-
-    public Link(User owner, String originURL, String shortURL, @NonNull Config config) {
-        this.owner = owner;
-        this.originURL = originURL;
-        this.shortURL = shortURL;
-        this.creationDateTime = LocalDateTime.now();
-        this.expirationDateTime = LocalDateTime.now().plusSeconds(config.getInt("link.ttl.seconds", 86400));
-    }
 
     public Link(User owner, String originURL, String shortURL, LocalDateTime creation, LocalDateTime expiration) {
         this.owner = owner;

@@ -3,8 +3,9 @@ package folki.dev.core.services;
 import folki.dev.core.entities.Link;
 import folki.dev.core.entities.User;
 import folki.dev.core.exceptions.CodeGenerationError;
-import folki.dev.infra.config.Config;
+import folki.dev.infra.config.ShortenerSettings;
 import folki.dev.infra.storage.Storage;
+import java.time.LocalDateTime;
 import org.jspecify.annotations.NonNull;
 
 public final class LinkService {
@@ -12,16 +13,17 @@ public final class LinkService {
 
     private final Storage storage;
     private final CodeGenerator codeGenerator;
-    private final Config config;
+    private final ShortenerSettings settings;
 
-    public LinkService(Storage storage, CodeGenerator codeGenerator, Config config) {
+    public LinkService(Storage storage, CodeGenerator codeGenerator, ShortenerSettings settings) {
         this.storage = storage;
         this.codeGenerator = codeGenerator;
-        this.config = config;
+        this.settings = settings;
     }
 
     public synchronized @NonNull Link createLink(@NonNull User owner, @NonNull String originURL) {
-        Link link = new Link(owner, originURL, generateUniqueCode(), config);
+        LocalDateTime now = LocalDateTime.now();
+        Link link = new Link(owner, originURL, generateUniqueCode(), now, now.plus(settings.defaultTtl()));
         storage.saveLink(link);
         return link;
     }
