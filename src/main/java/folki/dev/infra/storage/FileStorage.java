@@ -6,9 +6,6 @@ import folki.dev.core.entities.Link;
 import folki.dev.core.entities.User;
 import folki.dev.core.exceptions.FailToLoadStorageError;
 import folki.dev.core.exceptions.FailToSaveStorageError;
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
@@ -21,6 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 public final class FileStorage implements Storage {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();

@@ -74,6 +74,7 @@
                 <artifactId>spotless-maven-plugin</artifactId>
                 <version>${spotless.version}</version>
                 <configuration>
+                    <lineEndings>WINDOWS</lineEndings>
                     <java>
                         <palantirJavaFormat>
                             <version>${palantir-java-format.version}</version>

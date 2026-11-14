@@ -1,8 +1,7 @@
 package folki.dev.infra.config;
 
-import org.jspecify.annotations.Nullable;
-
 import java.util.Map;
+import org.jspecify.annotations.Nullable;
 
 public final class PropertiesConfig extends BaseConfig {
 

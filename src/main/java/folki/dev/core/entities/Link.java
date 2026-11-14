@@ -1,9 +1,8 @@
 package folki.dev.core.entities;
 
 import folki.dev.infra.config.Config;
-import org.jspecify.annotations.NonNull;
-
 import java.time.LocalDateTime;
+import org.jspecify.annotations.NonNull;
 
 public final class Link {
     public final User owner;

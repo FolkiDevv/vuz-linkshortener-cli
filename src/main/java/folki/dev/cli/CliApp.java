@@ -7,12 +7,11 @@ import folki.dev.core.exceptions.UserNotFoundError;
 import folki.dev.core.services.LinkService;
 import folki.dev.infra.config.Config;
 import folki.dev.infra.storage.Storage;
-import org.jspecify.annotations.NonNull;
-
 import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
 import java.util.UUID;
+import org.jspecify.annotations.NonNull;
 
 public final class CliApp {
     private final Interaction intr = new CliInteraction();
