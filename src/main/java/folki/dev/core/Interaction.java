@@ -1,5 +1,7 @@
 package folki.dev.core;
 
+import java.util.UUID;
+
 public abstract class Interaction {
     public abstract void print(String message);
 
@@ -17,6 +19,17 @@ public abstract class Interaction {
     public String askForString(String prompt, String defaultValue) {
         String input = askForString(prompt + ": ");
         return input.isEmpty() ? defaultValue : input;
+    }
+
+    public UUID askForUUID(String prompt) {
+        while (true) {
+            try {
+                String input = askForString(prompt);
+                return UUID.fromString(input);
+            } catch (IllegalArgumentException e) {
+                printError("Введенное значение не является верным UUID!");
+            }
+        }
     }
 
     public int askForInt(String prompt) {

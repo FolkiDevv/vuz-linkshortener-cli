@@ -6,13 +6,13 @@ import folki.dev.infra.config.PropertiesConfig;
 import folki.dev.infra.storage.FileStorage;
 import folki.dev.infra.storage.Storage;
 
-import java.io.File;
+import java.nio.file.Path;
 
 public class Main {
     static void main() {
         Config config = new PropertiesConfig();
-        File storageFile = new File("test.json");
-        Storage storage = new FileStorage(storageFile);
+        Path storageFile = Path.of("test.json");
+        Storage storage = FileStorage.load(storageFile);
         CliApp app = new CliApp(config, storage);
         app.mainCycle();
     }

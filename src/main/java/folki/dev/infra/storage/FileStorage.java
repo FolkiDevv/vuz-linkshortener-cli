@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class FileStorage implements Storage {
+public final class FileStorage implements Storage {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     private final File file;
