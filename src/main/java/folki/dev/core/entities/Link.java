@@ -38,6 +38,10 @@ public final class Link {
         return clickCount.get() < maxClicks;
     }
 
+    public boolean isExpired(LocalDateTime now) {
+        return !now.isBefore(expirationDateTime);
+    }
+
     @Override
     public int hashCode() {
         return originURL.hashCode() + shortURL.hashCode() + owner.hashCode();

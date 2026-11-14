@@ -74,7 +74,7 @@ public final class FileStorage implements Storage {
     }
 
     @Override
-    public void save() throws FailToSaveStorageError {
+    public synchronized void save() throws FailToSaveStorageError {
         List<UUID> userIds = List.copyOf(users.keySet());
         List<LinkJson> linkJsons = links.values().stream()
                 .map(link -> new LinkJson(
@@ -95,55 +95,55 @@ public final class FileStorage implements Storage {
     }
 
     @Override
-    public List<Link> getAllLinks() {
+    public synchronized List<Link> getAllLinks() {
         return List.copyOf(links.values());
     }
 
     @Override
-    public List<Link> getAllLinksByUser(User user) {
+    public synchronized List<Link> getAllLinksByUser(User user) {
         return links.values().stream().filter(link -> link.owner.equals(user)).toList();
     }
 
     @Override
     @Nullable
-    public Link getLinkByShortURL(String shortURL) {
+    public synchronized Link getLinkByShortURL(String shortURL) {
         return links.get(shortURL);
     }
 
     @Override
-    public void saveLink(Link link) {
+    public synchronized void saveLink(Link link) {
         users.putIfAbsent(link.owner.id, link.owner); // владелец ссылки тоже должен попасть в файл
         links.put(link.shortURL, link);
         save();
     }
 
     @Override
-    public void deleteLink(@NonNull Link link) {
+    public synchronized void deleteLink(@NonNull Link link) {
         links.remove(link.shortURL);
         save();
     }
 
     @Override
-    public void saveUser(User user) {
+    public synchronized void saveUser(User user) {
         users.put(user.id, user);
         save();
     }
 
     @Override
-    public void deleteUser(@NonNull User user) {
+    public synchronized void deleteUser(@NonNull User user) {
         users.remove(user.id);
         links.values().removeIf(link -> link.owner.equals(user));
         save();
     }
 
     @Override
-    public List<User> getAllUsers() {
+    public synchronized List<User> getAllUsers() {
         return List.copyOf(users.values());
     }
 
     @Override
     @Nullable
-    public User getUserById(UUID id) {
+    public synchronized User getUserById(UUID id) {
         return users.get(id);
     }
 }
