@@ -5,10 +5,14 @@ import com.google.gson.GsonBuilder;
 import folki.dev.core.entities.Link;
 import folki.dev.core.entities.User;
 import folki.dev.core.exceptions.FailToLoadStorageError;
+import folki.dev.core.exceptions.FailToSaveStorageError;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -34,7 +38,7 @@ public class FileStorage implements Storage {
         this.file = file;
     }
 
-    public static Storage load(Path path) {
+    public static @NonNull Storage load(@NonNull Path path) throws FailToLoadStorageError {
         FileStorage storage = new FileStorage(path.toFile());
         if (!path.toFile().exists() || path.toFile().length() == 0) {
             return storage;
@@ -63,7 +67,7 @@ public class FileStorage implements Storage {
     }
 
     @Override
-    public void save() {
+    public void save() throws FailToSaveStorageError {
         List<UUID> userIds = List.copyOf(users.keySet());
         List<LinkJson> linkJsons = links.values().stream()
                 .map(link -> new LinkJson(
@@ -77,7 +81,7 @@ public class FileStorage implements Storage {
         try (Writer writer = Files.newBufferedWriter(file.toPath(), StandardCharsets.UTF_8)) {
             GSON.toJson(new FileData(userIds, linkJsons), writer);
         } catch (IOException e) {
-            throw new UncheckedIOException("Failed to save storage to " + file, e);
+            throw new FailToSaveStorageError("Failed to save storage to " + file + ": " + e);
         }
     }
 

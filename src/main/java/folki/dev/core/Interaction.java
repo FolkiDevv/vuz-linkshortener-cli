@@ -1,12 +1,16 @@
 package folki.dev.core;
 
 public abstract class Interaction {
-    public abstract void say(String message);
+    public abstract void print(String message);
+
+    public void printError(String prompt) {
+        print("ОШИБКА: " + prompt);
+    }
 
     public abstract String read();
 
     public String askForString(String prompt) {
-        say(prompt + ": ");
+        print(prompt + ": ");
         return read();
     }
 
@@ -16,13 +20,25 @@ public abstract class Interaction {
     }
 
     public int askForInt(String prompt) {
-        String input = askForString(prompt);
-        return input.isEmpty() ? 0 : Integer.parseInt(input);
+        while (true) {
+            try {
+                String input = askForString(prompt);
+                return input.isEmpty() ? 0 : Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                printError("Введенное значение не является числом!");
+            }
+        }
     }
 
     public int askForInt(String prompt, int defaultValue) {
-        String input = askForString(prompt);
-        return input.isEmpty() ? defaultValue : Integer.parseInt(input);
+        while (true) {
+            try {
+                String input = askForString(prompt);
+                return input.isEmpty() ? defaultValue : Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                printError("Введенное значение не является числом!");
+            }
+        }
     }
 
     public boolean askForBoolean(String prompt) {

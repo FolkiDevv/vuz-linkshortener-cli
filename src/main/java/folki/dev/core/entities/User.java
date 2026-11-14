@@ -2,7 +2,7 @@ package folki.dev.core.entities;
 
 import java.util.UUID;
 
-public class User {
+public final class User {
     public final UUID id;
 
     public User() {

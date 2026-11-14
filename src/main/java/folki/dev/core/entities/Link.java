@@ -5,7 +5,7 @@ import org.jspecify.annotations.NonNull;
 
 import java.time.LocalDateTime;
 
-public class Link {
+public final class Link {
     public final User owner;
     public final String originURL;
     public final String shortURL;

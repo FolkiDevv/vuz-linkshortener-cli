@@ -3,7 +3,7 @@ package folki.dev.cli;
 import folki.dev.core.Interaction;
 import folki.dev.infra.Notifier;
 
-public class SoutNotifier implements Notifier {
+public final class SoutNotifier implements Notifier {
     private final Interaction cliInteraction;
 
     public SoutNotifier(Interaction cliInteraction) {
@@ -12,6 +12,6 @@ public class SoutNotifier implements Notifier {
 
     @Override
     public void notify(String message) {
-        cliInteraction.say(message);
+        cliInteraction.print(message);
     }
 }

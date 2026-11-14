@@ -4,7 +4,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
-public class PropertiesConfig extends BaseConfig {
+public final class PropertiesConfig extends BaseConfig {
 
     @Override
     public Config loadConfig(Map<String, String> config) {
