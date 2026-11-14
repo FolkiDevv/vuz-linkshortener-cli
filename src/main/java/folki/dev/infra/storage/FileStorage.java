@@ -97,7 +97,7 @@ public final class FileStorage implements Storage {
 
     @Override
     @Nullable
-    public Link getByShortURL(String shortURL) {
+    public Link getLinkByShortURL(String shortURL) {
         return links.get(shortURL);
     }
 

@@ -1,23 +1,30 @@
 package folki.dev.cli;
 
 import folki.dev.core.Interaction;
+import folki.dev.core.entities.Link;
 import folki.dev.core.entities.User;
 import folki.dev.core.exceptions.UserNotFoundError;
+import folki.dev.core.services.LinkService;
 import folki.dev.infra.config.Config;
 import folki.dev.infra.storage.Storage;
 import org.jspecify.annotations.NonNull;
 
+import java.awt.*;
+import java.io.IOException;
+import java.net.URI;
 import java.util.UUID;
 
 public final class CliApp {
     private final Interaction intr = new CliInteraction();
     private final Storage storage;
     private final Config config;
+    private final LinkService linkService;
     private final User user;
 
-    public CliApp(Config config, Storage storage) {
+    public CliApp(Config config, Storage storage, LinkService linkService) {
         this.config = config;
         this.storage = storage;
+        this.linkService = linkService;
         this.user = intr.askForBoolean("У вас есть UUID?") ? userLogin() : userRegister();
     }
 
@@ -50,18 +57,22 @@ public final class CliApp {
     private boolean mainMenu() {
         intr.print("""
             Доступный функционал:
-            1. Мои ссылки
-            2. Сократить ссылку
-            3. Выход из программы
+            1. Открыть ссылку
+            2. Мои ссылки
+            3. Сократить ссылку
+            4. Выход из программы
             """);
         switch (intr.askForInt("Выберите действие")) {
             case 1:
-                showMyLinks();
+                openLink();
                 break;
             case 2:
-                intr.print("2");
+                showMyLinks();
                 break;
             case 3:
+                createShortLink();
+                break;
+            case 4:
                 storage.save();
                 intr.print("Все данные сохранены.");
                 return false;
@@ -71,8 +82,43 @@ public final class CliApp {
         return true;
     }
 
+    private void openLink() {
+        String link = intr.askForString("Введите короткую ссылку или код");
+        Link linkToOpen = storage.getLinkByShortURL(extractCode(link));
+        if (linkToOpen == null) {
+            intr.print("Ссылка не найдена");
+            return;
+        }
+
+        intr.print("Открываю ссылку: " + linkToOpen.originURL);
+        try {
+            Desktop.getDesktop().browse(URI.create(linkToOpen.originURL));
+        } catch (IOException e) {
+            intr.print("Не удалось открыть ссылку");
+        }
+    }
+
     private void showMyLinks() {
         intr.print("Ваши ссылки:");
-        storage.getAllLinksByUser(user);
+        for (Link link : storage.getAllLinksByUser(user)) {
+            intr.print(link.toString());
+        }
+    }
+
+    private void createShortLink() {
+        String originURL = intr.askForString("Введите ссылку");
+        Link link = linkService.createLink(user, originURL);
+        intr.print("Ссылка успешно сокращена: " + toFullShortUrl(link));
+    }
+
+    private @NonNull String toFullShortUrl(@NonNull Link link) {
+        return config.getOptional("shortener.baseDomain")
+                .map(domain -> domain + "/" + link.shortURL)
+                .orElse(link.shortURL);
+    }
+
+    private static @NonNull String extractCode(@NonNull String input) {
+        String trimmed = input.strip();
+        return trimmed.substring(trimmed.lastIndexOf('/') + 1);
     }
 }

@@ -1,6 +1,23 @@
 {
   "users": [
+    "3f9836c5-95bd-48ec-be3e-722ddcd710fc",
+    "22ddce9a-4c22-4a0b-be48-d84c620508b2",
     "bc5039ec-94aa-4d48-8dfa-9242c422619a"
   ],
-  "links": []
+  "links": [
+    {
+      "owner": "bc5039ec-94aa-4d48-8dfa-9242c422619a",
+      "originURL": "https://habr.com/ru/companies/golovachcourses/articles/225585/",
+      "shortURL": "EVisp3",
+      "creationDateTime": "2026-11-15T13:08:22.559248200",
+      "expirationDateTime": "2026-11-16T13:08:22.559248200"
+    },
+    {
+      "owner": "bc5039ec-94aa-4d48-8dfa-9242c422619a",
+      "originURL": "https://habr.com/ru/companies/golovachcourses/articles/225585/",
+      "shortURL": "GuZZja",
+      "creationDateTime": "2026-11-15T13:01:07.924963500",
+      "expirationDateTime": "2026-11-16T13:01:07.924963500"
+    }
+  ]
 }

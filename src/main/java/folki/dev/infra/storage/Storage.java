@@ -22,7 +22,7 @@ public interface Storage extends Serializable, AutoCloseable {
     List<Link> getAllLinksByUser(User user);
 
     @Nullable
-    Link getByShortURL(String shortURL);
+    Link getLinkByShortURL(String shortURL);
 
     void saveLink(Link link);
 
