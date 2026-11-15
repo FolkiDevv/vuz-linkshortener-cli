@@ -40,16 +40,20 @@ public final class LinkService {
         this.clock = clock;
     }
 
-    public synchronized @NonNull Link createLink(@NonNull User owner, @NonNull String originURL) {
+    public @NonNull Link createLink(@NonNull User owner, @NonNull String originURL) {
+        return createLink(owner, originURL, null, null);
+    }
+
+    public synchronized @NonNull Link createLink(
+            @NonNull User owner, @NonNull String originURL, @Nullable Integer maxClicks, @Nullable Duration ttl) {
+        String url = UrlValidator.validate(originURL).toString();
+        int limit = maxClicks != null ? maxClicks : settings.defaultMaxClicks();
+        Duration lifetime = ttl != null ? ttl : settings.defaultTtl();
+        validateMaxClicks(limit);
+        validateTtl(lifetime);
+
         LocalDateTime now = LocalDateTime.now(clock);
-        Link link = new Link(
-                owner,
-                originURL,
-                generateUniqueCode(),
-                now,
-                now.plus(settings.defaultTtl()),
-                settings.defaultMaxClicks(),
-                0);
+        Link link = new Link(owner, url, generateUniqueCode(), now, now.plus(lifetime), limit, 0);
         storage.saveLink(link);
         LOG.info("Создана ссылка " + link.shortURL + " пользователем " + owner.id);
         return link;
