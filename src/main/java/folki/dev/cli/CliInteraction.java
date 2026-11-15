@@ -12,6 +12,12 @@ public final class CliInteraction extends Interaction {
     }
 
     @Override
+    public void printPrompt(String prompt) {
+        System.out.print(prompt);
+        System.out.flush();
+    }
+
+    @Override
     public String read() {
         return scanner.nextLine();
     }

@@ -5,6 +5,10 @@ import java.util.UUID;
 public abstract class Interaction {
     public abstract void print(String message);
 
+    public void printPrompt(String prompt) {
+        print(prompt);
+    }
+
     public void printError(String prompt) {
         print("ОШИБКА: " + prompt);
     }
